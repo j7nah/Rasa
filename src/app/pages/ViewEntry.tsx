@@ -13,13 +13,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../components/ui/alert-dialog';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../components/ui/dropdown-menu';
-import { ArrowLeft, Edit, Trash2, User } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, User, Archive, ListPlus } from 'lucide-react';
 import { format } from 'date-fns';
 import { RatingDisplay } from '../components/RatingDisplay';
 
@@ -27,7 +21,6 @@ export default function ViewEntry() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [entry, setEntry] = useState<JournalEntry | null>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -38,7 +31,7 @@ export default function ViewEntry() {
 
   const handleDelete = () => {
     if (id && journalService.deleteEntry(id)) {
-      navigate('/');
+      navigate('/entries');
     }
   };
 
@@ -48,35 +41,30 @@ export default function ViewEntry() {
         <header className="border-b border-gray-200">
           <div className="px-6 py-4 flex items-center justify-between">
             <h1 className="text-xl tracking-wide">rasa</h1>
-            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}
-                >
+            <div className="flex items-center gap-4">
+              <Link to="/profile">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                   <User className="size-5" />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-40"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <DropdownMenuItem className="cursor-pointer">profile</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">settings</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">queue</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">archive</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </Link>
+              <Link to="/queue">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <ListPlus className="size-5" />
+                </button>
+              </Link>
+              <Link to="/entries">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Archive className="size-5 relative top-[1px]" />
+                </button>
+              </Link>
+            </div>
           </div>
         </header>
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <p className="text-gray-600 mb-4">entry not found</p>
-            <Link to="/">
-              <Button variant="outline" className="border-gray-300">return home</Button>
+            <Link to="/entries">
+              <Button variant="outline" className="border-gray-300">return to archive</Button>
             </Link>
           </div>
         </div>
@@ -90,7 +78,7 @@ export default function ViewEntry() {
       <header className="border-b border-gray-200">
         <div className="px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link to="/">
+            <Link to="/entries">
               <button className="text-gray-600 hover:text-gray-900 transition-colors">
                 <ArrowLeft className="size-5" />
               </button>
@@ -98,14 +86,14 @@ export default function ViewEntry() {
             <h1 className="text-xl tracking-wide">rasa</h1>
           </div>
           <div className="flex items-center gap-4">
-            <Link to={`/edit/${entry.id}`}>
-              <button className="text-gray-600 hover:text-gray-900 transition-colors">
+            <Link to={`/edit/${entry.id}`} className="flex items-center">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                 <Edit className="size-5" />
               </button>
             </Link>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <button className="text-gray-600 hover:text-gray-900 transition-colors">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                   <Trash2 className="size-5" />
                 </button>
               </AlertDialogTrigger>
@@ -127,28 +115,21 @@ export default function ViewEntry() {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}
-                >
-                  <User className="size-5" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-40"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <DropdownMenuItem className="cursor-pointer">profile</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">settings</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">queue</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">archive</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link to="/profile">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <User className="size-5" />
+              </button>
+            </Link>
+            <Link to="/queue">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <ListPlus className="size-5" />
+              </button>
+            </Link>
+            <Link to="/entries">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <Archive className="size-5 relative top-[1px]" />
+              </button>
+            </Link>
           </div>
         </div>
       </header>

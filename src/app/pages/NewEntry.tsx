@@ -6,13 +6,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../components/ui/dropdown-menu';
-import { X, User } from 'lucide-react';
+import { User, Archive, ListPlus } from 'lucide-react';
 import { RatingDots } from '../components/RatingDots';
 
 export default function NewEntry() {
@@ -21,7 +15,6 @@ export default function NewEntry() {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [type, setType] = useState<string>('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +27,7 @@ export default function NewEntry() {
       type: type || undefined,
     });
 
-    navigate('/');
+    navigate('/entries');
   };
 
   return (
@@ -42,12 +35,26 @@ export default function NewEntry() {
       {/* Top Banner */}
       <header className="border-b border-gray-200">
         <div className="px-6 py-4 flex items-center justify-between">
-          <h1 className="text-xl tracking-wide">rasa</h1>
           <Link to="/">
-            <button className="text-gray-600 hover:text-gray-900 transition-colors">
-              <X className="size-5" />
-            </button>
+            <h1 className="text-xl tracking-wide cursor-pointer hover:text-gray-600 transition-colors">rasa</h1>
           </Link>
+          <div className="flex items-center gap-4">
+            <Link to="/profile">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <User className="size-5" />
+              </button>
+            </Link>
+            <Link to="/queue">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <ListPlus className="size-5" />
+              </button>
+            </Link>
+            <Link to="/entries">
+              <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                <Archive className="size-5 relative top-[1px]" />
+              </button>
+            </Link>
+          </div>
         </div>
       </header>
 

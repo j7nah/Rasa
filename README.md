@@ -1,7 +1,7 @@
 
-  # Journal entry website
+  # rasa
 
-  This is a code bundle for Journal entry website. The original project is available at https://www.figma.com/design/8jpPyr4VYWGW7NhemM7Z5a/Journal-entry-website.
+  This is a code bundle for rasa. The original project is available at https://www.figma.com/design/8jpPyr4VYWGW7NhemM7Z5a/rasa.
 
   ## Running the code
 

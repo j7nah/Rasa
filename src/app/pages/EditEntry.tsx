@@ -6,13 +6,7 @@ import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '../components/ui/dropdown-menu';
-import { X, User } from 'lucide-react';
+import { X, User, Archive, ListPlus } from 'lucide-react';
 import { RatingDots } from '../components/RatingDots';
 
 export default function EditEntry() {
@@ -23,7 +17,6 @@ export default function EditEntry() {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [type, setType] = useState<string>('');
-  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -58,28 +51,23 @@ export default function EditEntry() {
         <header className="border-b border-gray-200">
           <div className="px-6 py-4 flex items-center justify-between">
             <h1 className="text-xl tracking-wide">rasa</h1>
-            <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className="text-gray-600 hover:text-gray-900 transition-colors"
-                  onMouseEnter={() => setDropdownOpen(true)}
-                  onMouseLeave={() => setDropdownOpen(false)}
-                >
+            <div className="flex items-center gap-4">
+              <Link to="/profile">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
                   <User className="size-5" />
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="end"
-                className="w-40"
-                onMouseEnter={() => setDropdownOpen(true)}
-                onMouseLeave={() => setDropdownOpen(false)}
-              >
-                <DropdownMenuItem className="cursor-pointer">profile</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">settings</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">queue</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">archive</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              </Link>
+              <Link to="/queue">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <ListPlus className="size-5" />
+                </button>
+              </Link>
+              <Link to="/entries">
+                <button className="text-gray-600 hover:text-gray-900 transition-colors flex items-center">
+                  <Archive className="size-5 relative top-[1px]" />
+                </button>
+              </Link>
+            </div>
           </div>
         </header>
         <div className="flex-1 flex items-center justify-center">
