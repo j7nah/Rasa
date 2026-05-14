@@ -137,21 +137,35 @@ export default function ViewEntry() {
       {/* Entry Content */}
       <div className="flex-1 p-12">
         <div className="max-w-3xl mx-auto space-y-8">
-          <div className="space-y-2">
-            {entry.rating && entry.rating > 0 && (
-              <div className="mb-4">
-                <RatingDisplay value={entry.rating} />
-              </div>
+          <div className="flex gap-6 items-start">
+            {entry.coverUrl && (
+              <img
+                src={entry.coverUrl}
+                alt={entry.title}
+                className="w-24 rounded shadow-sm flex-shrink-0 object-cover"
+              />
             )}
-            {entry.type && (
-              <div className="text-sm text-gray-500 mb-2">{entry.type}</div>
-            )}
-            <h2 className="text-3xl">{entry.title}</h2>
-            <p className="text-sm text-gray-500">
-              {format(new Date(entry.createdAt), 'MMMM d, yyyy')}
-            </p>
+            <div className="space-y-2 flex-1">
+              {entry.rating && entry.rating > 0 && (
+                <div className="mb-4">
+                  <RatingDisplay value={entry.rating} />
+                </div>
+              )}
+              {entry.type && (
+                <div className="text-sm text-gray-500">{entry.type}</div>
+              )}
+              <h2 className="text-3xl">{entry.title}</h2>
+              {(entry.creator || entry.year) && (
+                <p className="text-sm text-gray-500">
+                  {[entry.creator, entry.year].filter(Boolean).join(' · ')}
+                </p>
+              )}
+              <p className="text-sm text-gray-400">
+                {format(new Date(entry.createdAt), 'MMMM d, yyyy')}
+              </p>
+            </div>
           </div>
-          
+
           <div className="text-gray-800 whitespace-pre-wrap leading-relaxed">
             {entry.content}
           </div>

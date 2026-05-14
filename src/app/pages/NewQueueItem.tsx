@@ -2,19 +2,15 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { journalService } from '../services/journalService';
 import { Button } from '../components/ui/button';
-import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { User, Archive, ListPlus } from 'lucide-react';
-import { RatingDots } from '../components/RatingDots';
 import { SearchAutocomplete } from '../components/SearchAutocomplete';
 import type { SearchResult } from '../services/tmdbService';
 
-export default function NewEntry() {
+export default function NewQueueItem() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [rating, setRating] = useState(0);
   const [type, setType] = useState<string>('');
   const [coverUrl, setCoverUrl] = useState<string | undefined>();
   const [creator, setCreator] = useState<string | undefined>();
@@ -41,12 +37,10 @@ export default function NewEntry() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() || !content.trim()) return;
+    if (!title.trim()) return;
 
-    journalService.createEntry({
+    journalService.addQueueItem({
       title: title.trim(),
-      content: content.trim(),
-      rating: rating > 0 ? rating : undefined,
       type: type || undefined,
       coverUrl,
       creator,
@@ -54,12 +48,11 @@ export default function NewEntry() {
       externalId,
     });
 
-    navigate('/entries');
+    navigate('/queue');
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      {/* Top Banner */}
       <header className="border-b border-gray-200">
         <div className="px-6 py-4 flex items-center justify-between">
           <Link to="/">
@@ -85,7 +78,6 @@ export default function NewEntry() {
         </div>
       </header>
 
-      {/* Form Content */}
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="w-full max-w-2xl">
           <form onSubmit={handleSubmit} className="space-y-8">
@@ -116,33 +108,14 @@ export default function NewEntry() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label className="text-sm text-gray-600">rating</Label>
-              <div className="h-9 w-full rounded-md border border-gray-300 bg-input-background px-3 flex items-center justify-center">
-                <RatingDots value={rating} onChange={setRating} />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="content" className="text-sm text-gray-600">entry</Label>
-              <Textarea
-                id="content"
-                placeholder="start writing..."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-                className="min-h-[300px] resize-none border-gray-300"
-              />
-            </div>
-
             <div className="flex justify-center">
               <Button
                 type="submit"
                 variant="outline"
                 className="px-8 border-gray-300 hover:bg-gray-50"
-                disabled={!title.trim() || !content.trim()}
+                disabled={!title.trim()}
               >
-                save
+                add to queue
               </Button>
             </div>
           </form>

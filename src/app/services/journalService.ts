@@ -4,11 +4,27 @@ export interface JournalEntry {
   content: string;
   rating?: number;
   type?: string;
+  coverUrl?: string;
+  creator?: string;
+  year?: string;
+  externalId?: string;
   createdAt: string;
   updatedAt: string;
 }
 
+export interface QueueItem {
+  id: string;
+  title: string;
+  type?: string;
+  coverUrl?: string;
+  creator?: string;
+  year?: string;
+  externalId?: string;
+  createdAt: string;
+}
+
 const STORAGE_KEY = 'journal_entries';
+const QUEUE_STORAGE_KEY = 'queue_items';
 
 export const journalService = {
   getAllEntries(): JournalEntry[] {
@@ -55,6 +71,31 @@ export const journalService = {
     if (filtered.length === entries.length) return false;
     
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+    return true;
+  },
+
+  getAllQueueItems(): QueueItem[] {
+    const items = localStorage.getItem(QUEUE_STORAGE_KEY);
+    return items ? JSON.parse(items) : [];
+  },
+
+  addQueueItem(item: Omit<QueueItem, 'id' | 'createdAt'>): QueueItem {
+    const items = this.getAllQueueItems();
+    const newItem: QueueItem = {
+      ...item,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+    };
+    items.unshift(newItem);
+    localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(items));
+    return newItem;
+  },
+
+  removeQueueItem(id: string): boolean {
+    const items = this.getAllQueueItems();
+    const filtered = items.filter(item => item.id !== id);
+    if (filtered.length === items.length) return false;
+    localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(filtered));
     return true;
   },
 };

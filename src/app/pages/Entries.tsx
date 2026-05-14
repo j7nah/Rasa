@@ -62,11 +62,21 @@ export default function Entries() {
               {entries.map((entry) => (
                 <Link key={entry.id} to={`/entry/${entry.id}`}>
                   <div className="border-b border-gray-200 py-4 hover:bg-gray-50 transition-colors px-4 -mx-4">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      {entry.coverUrl ? (
+                        <img
+                          src={entry.coverUrl}
+                          alt={entry.title}
+                          className="size-10 rounded object-cover flex-shrink-0 bg-gray-100"
+                        />
+                      ) : (
+                        <div className="size-10 rounded flex-shrink-0 bg-gray-100" />
+                      )}
                       <div className="flex-1 min-w-0">
                         <h3 className="text-base truncate">{entry.title}</h3>
                         <div className="flex items-center gap-3 mt-1 text-sm text-gray-500">
                           {entry.type && <span>{entry.type}</span>}
+                          {entry.creator && <span>{entry.creator}</span>}
                           {entry.rating && (
                             <span>{entry.rating} / 10</span>
                           )}

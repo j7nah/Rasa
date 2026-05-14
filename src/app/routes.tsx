@@ -6,6 +6,7 @@ import ViewEntry from "./pages/ViewEntry";
 import Entries from "./pages/Entries";
 import Profile from "./pages/Profile";
 import Queue from "./pages/Queue";
+import NewQueueItem from "./pages/NewQueueItem";
 
 export const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
   {
     path: "/queue",
     Component: Queue,
+  },
+  {
+    path: "/queue/new",
+    Component: NewQueueItem,
   },
   {
     path: "/entry/:id",

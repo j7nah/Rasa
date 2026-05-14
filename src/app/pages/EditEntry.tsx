@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router';
 import { journalService, JournalEntry } from '../services/journalService';
 import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { X, User, Archive, ListPlus } from 'lucide-react';
 import { RatingDots } from '../components/RatingDots';
+import { SearchAutocomplete } from '../components/SearchAutocomplete';
+import type { SearchResult } from '../services/tmdbService';
 
 export default function EditEntry() {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,10 @@ export default function EditEntry() {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [type, setType] = useState<string>('');
+  const [coverUrl, setCoverUrl] = useState<string | undefined>();
+  const [creator, setCreator] = useState<string | undefined>();
+  const [year, setYear] = useState<string | undefined>();
+  const [externalId, setExternalId] = useState<string | undefined>();
 
   useEffect(() => {
     if (id) {
@@ -27,9 +32,31 @@ export default function EditEntry() {
         setContent(foundEntry.content);
         setRating(foundEntry.rating || 0);
         setType(foundEntry.type || '');
+        setCoverUrl(foundEntry.coverUrl);
+        setCreator(foundEntry.creator);
+        setYear(foundEntry.year);
+        setExternalId(foundEntry.externalId);
       }
     }
   }, [id]);
+
+  const handleSelect = (result: SearchResult) => {
+    setTitle(result.title);
+    setCoverUrl(result.coverUrl);
+    setCreator(result.subtitle);
+    setYear(result.year);
+    setExternalId(result.id);
+  };
+
+  const handleTitleChange = (value: string) => {
+    setTitle(value);
+    if (coverUrl || creator || year) {
+      setCoverUrl(undefined);
+      setCreator(undefined);
+      setYear(undefined);
+      setExternalId(undefined);
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +67,10 @@ export default function EditEntry() {
       content: content.trim(),
       rating: rating > 0 ? rating : undefined,
       type: type || undefined,
+      coverUrl,
+      creator,
+      year,
+      externalId,
     });
 
     navigate(`/entry/${id}`);
@@ -101,20 +132,6 @@ export default function EditEntry() {
         <div className="w-full max-w-2xl">
           <form onSubmit={handleSubmit} className="space-y-8">
             <div className="space-y-2">
-              <Label htmlFor="title" className="text-sm text-gray-600">title</Label>
-              <Input
-                id="title"
-                type="text"
-                placeholder="untitled"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-                autoFocus
-                className="border-gray-300"
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="type" className="text-sm text-gray-600">type</Label>
               <Select value={type} onValueChange={setType}>
                 <SelectTrigger id="type" className="border-gray-300">
@@ -129,6 +146,16 @@ export default function EditEntry() {
                   <SelectItem value="tv show">tv show</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-sm text-gray-600">title</Label>
+              <SearchAutocomplete
+                type={type}
+                value={title}
+                onChange={handleTitleChange}
+                onSelect={handleSelect}
+              />
             </div>
 
             <div className="space-y-2">
