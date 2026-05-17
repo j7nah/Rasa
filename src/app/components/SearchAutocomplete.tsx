@@ -4,6 +4,7 @@ import type { SearchResult } from '../services/tmdbService';
 import { searchMovies, searchTV } from '../services/tmdbService';
 import { searchAlbums, searchTracks } from '../services/spotifyService';
 import { searchBooks } from '../services/openLibraryService';
+import { searchVideoGames } from '../services/gameBrainService';
 
 interface SearchAutocompleteProps {
   type: string;
@@ -24,12 +25,14 @@ async function runSearch(type: string, query: string): Promise<SearchResult[]> {
       return searchTracks(query);
     case 'book':
       return searchBooks(query);
+    case 'video game':
+      return searchVideoGames(query);
     default:
       return [];
   }
 }
 
-const SEARCHABLE_TYPES = new Set(['movie', 'tv show', 'album', 'song', 'book']);
+const SEARCHABLE_TYPES = new Set(['movie', 'tv show', 'album', 'song', 'book', 'video game']);
 
 export function SearchAutocomplete({ type, value, onChange, onSelect }: SearchAutocompleteProps) {
   const [results, setResults] = useState<SearchResult[]>([]);
