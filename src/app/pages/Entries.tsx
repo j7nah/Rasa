@@ -4,7 +4,7 @@ import { User, Archive, ListPlus } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import type { JournalEntry } from '../services/journalService';
 
-const MEDIA_TYPES = ['movie', 'album', 'song', 'video game', 'book', 'tv show'];
+const MEDIA_TYPES = ['movie', 'tv show', 'album', 'song', 'video game', 'book', 'podcast'];
 const LIMIT_OPTIONS = [10, 25, 50, 100];
 const RATING_OPTIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 

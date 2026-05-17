@@ -144,6 +144,7 @@ export default function EditEntry() {
                   <SelectItem value="video game">video game</SelectItem>
                   <SelectItem value="book">book</SelectItem>
                   <SelectItem value="tv show">tv show</SelectItem>
+                  <SelectItem value="podcast">podcast</SelectItem>
                 </SelectContent>
               </Select>
             </div>

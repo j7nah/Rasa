@@ -97,11 +97,12 @@ export default function NewEntry() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="movie">movie</SelectItem>
+                  <SelectItem value="tv show">tv show</SelectItem>
                   <SelectItem value="album">album</SelectItem>
                   <SelectItem value="song">song</SelectItem>
                   <SelectItem value="video game">video game</SelectItem>
                   <SelectItem value="book">book</SelectItem>
-                  <SelectItem value="tv show">tv show</SelectItem>
+                  <SelectItem value="podcast">podcast</SelectItem>
                 </SelectContent>
               </Select>
             </div>

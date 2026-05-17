@@ -5,6 +5,8 @@ import { searchMovies, searchTV } from '../services/tmdbService';
 import { searchAlbums, searchTracks } from '../services/spotifyService';
 import { searchBooks } from '../services/openLibraryService';
 import { searchVideoGames } from '../services/gameBrainService';
+import { searchAnime, searchManga } from '../services/jikanService';
+import { searchPodcasts } from '../services/podcastIndexService';
 
 interface SearchAutocompleteProps {
   type: string;
@@ -13,26 +15,48 @@ interface SearchAutocompleteProps {
   onSelect: (result: SearchResult) => void;
 }
 
+function interleave<T>(a: T[], b: T[]): T[] {
+  const out: T[] = [];
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    if (i < a.length) out.push(a[i]);
+    if (i < b.length) out.push(b[i]);
+  }
+  return out;
+}
+
 async function runSearch(type: string, query: string): Promise<SearchResult[]> {
   switch (type) {
     case 'movie':
       return searchMovies(query);
-    case 'tv show':
-      return searchTV(query);
+    case 'tv show': {
+      const [tv, anime] = await Promise.allSettled([searchTV(query), searchAnime(query)]);
+      return interleave(
+        tv.status === 'fulfilled' ? tv.value : [],
+        anime.status === 'fulfilled' ? anime.value : [],
+      );
+    }
     case 'album':
       return searchAlbums(query);
     case 'song':
       return searchTracks(query);
-    case 'book':
-      return searchBooks(query);
+    case 'book': {
+      const [books, manga] = await Promise.allSettled([searchBooks(query), searchManga(query)]);
+      return interleave(
+        books.status === 'fulfilled' ? books.value : [],
+        manga.status === 'fulfilled' ? manga.value : [],
+      );
+    }
     case 'video game':
       return searchVideoGames(query);
+    case 'podcast':
+      return searchPodcasts(query);
     default:
       return [];
   }
 }
 
-const SEARCHABLE_TYPES = new Set(['movie', 'tv show', 'album', 'song', 'book', 'video game']);
+const SEARCHABLE_TYPES = new Set(['movie', 'tv show', 'album', 'song', 'book', 'video game', 'podcast']);
 
 export function SearchAutocomplete({ type, value, onChange, onSelect }: SearchAutocompleteProps) {
   const [results, setResults] = useState<SearchResult[]>([]);
